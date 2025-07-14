@@ -21,3 +21,5 @@ storage/uploads/
 
 # Environment files (optional)
 .env
+
+serviceAccountKey.json
