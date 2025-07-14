@@ -1,5 +1,6 @@
+from typing import List
+
 from pydantic_settings import BaseSettings
-from typing import Optional
 
 
 class Settings(BaseSettings):
@@ -12,6 +13,8 @@ class Settings(BaseSettings):
 
     FIREBASE_STORAGE_BUCKET: str
     FIREBASE_DATABASE_URL: str
+
+    BACKEND_CORS_ORIGINS: List[str] = []
 
     class Config:
         env_file = ".env"

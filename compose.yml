@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  fastapi-app:
+    build: .
+    container_name: xmp-processor-server
+    ports:
+      - "8000:8000"
+    environment:
+      # Firebase configuration
+      - FIREBASE_STORAGE_BUCKET=${FIREBASE_STORAGE_BUCKET}
+      - FIREBASE_DATABASE_URL=${FIREBASE_DATABASE_URL}
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/serviceAccountKey.json
+
+      # Application settings
+      - ENV=${ENV:-development}
+      - DEBUG=${DEBUG:-true}
+      - SECRET_KEY=${SECRET_KEY:-your-secret-key-here}
+
+      # API configuration
+      - API_V1_STR=${API_V1_STR:-/api/v1}
+      - BACKEND_CORS_ORIGINS=${BACKEND_CORS_ORIGINS:-["http://localhost:3000", "http://localhost:8080"]}
+
+      # Security
+      - ACCESS_TOKEN_EXPIRE_MINUTES=${ACCESS_TOKEN_EXPIRE_MINUTES:-30}
+    volumes:
+      # Mount Firebase service account key
+      - ./serviceAccountKey.json:/app/serviceAccountKey.json:ro
+      # Mount for development (optional - remove in production)
+      - ./app:/app/app
+      - ./logs:/app/logs
+    restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

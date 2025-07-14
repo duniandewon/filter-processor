@@ -10,12 +10,7 @@ app = FastAPI(
     version=settings.PROJECT_VERSION,
 )
 
-origins = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    # Add production domain later, e.g.:
-    # "https://my-shared-album-app.com",
-]
+origins = origins = settings.BACKEND_CORS_ORIGINS
 
 app.add_middleware(
     CORSMiddleware,
@@ -26,6 +21,11 @@ app.add_middleware(
 )
 
 app.include_router(routes.router)
+
+
+@app.get("/health")
+async def health():
+    return {"status": "ok"}
 
 if __name__ == "__main__":
     import uvicorn
