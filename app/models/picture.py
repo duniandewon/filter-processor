@@ -5,4 +5,5 @@ class UploadPictureRequest(BaseModel):
     uploaderId: str
     uploaderName: str
     eventId: str
+    filter_name: str
     picture: str  # base64 data_url

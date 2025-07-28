@@ -7,6 +7,7 @@ RUN apt-get update && apt-get install -y \
     gcc \
     libffi-dev \
     curl \
+    ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
 RUN adduser --disabled-password --gecos '' appuser

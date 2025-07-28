@@ -1,6 +1,4 @@
 import os
-import re
-import base64
 from datetime import datetime
 
 import firebase_admin
@@ -18,22 +16,22 @@ if not firebase_admin._apps:
     })
 
 
-def upload_picture_to_firebase(uploader_id: str, uploader_name: str, event_id: str, data_url: str):
+def upload_picture_to_firebase(
+    uploader_id: str,
+    uploader_name: str,
+    event_id: str,
+    image_bytes: bytes,
+    file_ext: str = "jpg"
+):
     pictures_ref = db.reference(f"pictures/{event_id}")
     new_picture_ref = pictures_ref.push()
     picture_id = new_picture_ref.key
-
-    match = re.match(r"data:image/(.*?);base64,(.*)", data_url)
-    if not match:
-        raise ValueError("Invalid data_url format")
-
-    file_ext, encoded = match.groups()
-    image_data = base64.b64decode(encoded)
-
+    
     storage_path = f"pictures/{event_id}/{picture_id}.jpg"
+
     bucket = storage.bucket()
     blob = bucket.blob(storage_path)
-    blob.upload_from_string(image_data, content_type=f"image/{file_ext}")
+    blob.upload_from_string(image_bytes, content_type=f"image/{file_ext}")
 
     blob.make_public()
     download_url = blob.public_url
