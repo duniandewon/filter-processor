@@ -58,9 +58,8 @@ dist/
 *.egg-info/
 
 # Docker
-Dockerfile
 docker-compose*.yml
-.dockerignore
+compose*.yml
 
 # Other
 .mypy_cache/
