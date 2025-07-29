@@ -13,6 +13,7 @@ class Settings(BaseSettings):
 
     FIREBASE_STORAGE_BUCKET: str
     FIREBASE_DATABASE_URL: str
+    FIREBASE_SERVICE_ACCOUNT_KEY_JSON: str
 
     BACKEND_CORS_ORIGINS: List[str] = []
 

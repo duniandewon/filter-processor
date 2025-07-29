@@ -10,7 +10,7 @@ services:
       # Firebase configuration
       - FIREBASE_STORAGE_BUCKET=${FIREBASE_STORAGE_BUCKET}
       - FIREBASE_DATABASE_URL=${FIREBASE_DATABASE_URL}
-      - GOOGLE_APPLICATION_CREDENTIALS=/app/serviceAccountKey.json
+      - FIREBASE_SERVICE_ACCOUNT_KEY_JSON=${FIREBASE_SERVICE_ACCOUNT_KEY_JSON}
 
       # Application settings
       - ENV=${ENV:-development}
@@ -24,8 +24,6 @@ services:
       # Security
       - ACCESS_TOKEN_EXPIRE_MINUTES=${ACCESS_TOKEN_EXPIRE_MINUTES:-30}
     volumes:
-      # Mount Firebase service account key
-      - ./serviceAccountKey.json:/app/serviceAccountKey.json:ro
       # Mount for development (optional - remove in production)
       - ./app:/app/app
       - ./logs:/app/logs
