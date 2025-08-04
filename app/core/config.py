@@ -1,3 +1,4 @@
+import os
 from typing import List
 
 from pydantic_settings import BaseSettings
@@ -8,7 +9,7 @@ class Settings(BaseSettings):
     PROJECT_VERSION: str = "1.0.0"
 
     HOST: str = "0.0.0.0"
-    PORT: int = 8000
+    PORT: int = int(os.getenv("PORT", 8000))
     DEBUG: bool = False
 
     FIREBASE_STORAGE_BUCKET: str
