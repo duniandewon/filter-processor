@@ -7,17 +7,25 @@ def apply_lut_with_ffmpeg(input_bytes: bytes, cube_file_path: str) -> bytes:
         input_file.write(input_bytes)
         input_file.flush()
 
-        result = subprocess.run([
+        cmd = [
             "ffmpeg",
-            "-y",  # Overwrite output if exists
-            "-i", input_file.name,
+            "-y",
+            "-i", "pipe:0",
             "-vf", f"lut3d={cube_file_path}",
-            output_file.name
-        ], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            "-f", "image2",
+            "-vcodec", "mjpeg",
+            "pipe:1"
+        ]
 
-        if result.returncode != 0:
-            print("FFmpeg error:", result.stderr.decode())
-            raise RuntimeError("FFmpeg failed to apply LUT")
+        proc = subprocess.run(
+            cmd,
+            input=input_bytes,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+        )
 
-        output_file.seek(0)
-        return output_file.read()
+    if proc.returncode != 0:
+        print(proc.stderr.decode())
+        raise RuntimeError("ffmpeg error")
+
+    return proc.stdout
