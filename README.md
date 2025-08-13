@@ -174,7 +174,7 @@ Start FastAPI server
 uvicorn app.main:app --reload --port 8000
 ```
 
-### Adding New LUT Filters
+## Adding New LUT Filters
 
 1. Add `.cube` files to the `app/filters/` directory
 2. Use the filename (without extension) as the `filter_name` in API requests
