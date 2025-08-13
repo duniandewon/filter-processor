@@ -40,6 +40,7 @@ A FastAPI application with Celery background task processing for applying LUT fi
 
 ## Project Structure
 
+```md
 xmp-processor/
 ├── app/
 │ ├── api/
@@ -60,6 +61,7 @@ xmp-processor/
 ├── Dockerfile # Container definition
 ├── requirements.txt # Python dependencies
 └── README.md
+```
 
 ## Prerequisites
 
