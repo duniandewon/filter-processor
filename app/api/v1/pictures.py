@@ -1,14 +1,10 @@
-import base64
 import re
 
-from fastapi import APIRouter, HTTPException
-
-from app.models.picture import UploadPictureRequest
-
-from app.services.firebase_service import upload_picture_to_firebase
-from app.services.ffmpeg_service import apply_lut_with_ffmpeg
-
+from app.core.celery_app import celery_app
+from app.models.picture import TaskResponse, UploadPictureRequest
+from app.tasks.image_tasks import process_and_upload_image
 from app.utils.validators import validate_data_url_image, verify_participant
+from fastapi import APIRouter, HTTPException
 
 router = APIRouter()
 
@@ -24,7 +20,6 @@ async def upload_picture(payload: UploadPictureRequest):
         raise ValueError("Invalid data_url format")
 
     file_ext, encoded = match.groups()
-    original_bytes = base64.b64decode(encoded)
 
     if not re.compile(r"^[a-zA-Z0-9_]+$").match(payload.filter_name):
         raise HTTPException(
@@ -32,23 +27,17 @@ async def upload_picture(payload: UploadPictureRequest):
             detail="Invalid filter name. Only letters, numbers, and underscores allowed."
         )
 
-    cube_file_path = f"app/filters/{payload.filter_name}.cube"
-
-    try:
-        filtered_bytes = apply_lut_with_ffmpeg(
-            input_bytes=original_bytes,
-            cube_file_path=cube_file_path
-        )
-    except Exception as e:
-        raise HTTPException(
-            status_code=500, detail=f"Failed to apply filter: {e}")
-
-    result = upload_picture_to_firebase(
+    task = process_and_upload_image.delay(
         uploader_id=payload.uploaderId,
         uploader_name=payload.uploaderName,
         event_id=payload.eventId,
-        image_bytes=filtered_bytes,
+        filter_name=payload.filter_name,
+        picture_data=encoded,
         file_ext=file_ext
     )
 
-    return result
+    return TaskResponse(
+        task_id=task.id,
+        status="PENDING",
+        message="Image processing started"
+    )

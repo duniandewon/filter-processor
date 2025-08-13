@@ -7,3 +7,8 @@ class UploadPictureRequest(BaseModel):
     eventId: str
     filter_name: str
     picture: str  # base64 data_url
+
+class TaskResponse(BaseModel):
+    task_id: str
+    status: str
+    message: str

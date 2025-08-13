@@ -16,6 +16,9 @@ class Settings(BaseSettings):
     FIREBASE_DATABASE_URL: str
     FIREBASE_SERVICE_ACCOUNT_KEY_JSON: str
 
+    REDIS_URL: str = os.getenv("REDIS_URL", "redis://localhost:6379")
+    REDIS_PASSWORD: str = os.getenv("REDIS_PASSWORD", "password")
+
     BACKEND_CORS_ORIGINS: List[str] = []
 
     class Config:
