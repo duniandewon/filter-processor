@@ -13,6 +13,7 @@ A FastAPI application with Celery background task processing for applying LUT fi
 
 ## Architecture
 
+```md
 ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐
 │ FastAPI App │───▶│ Redis Broker │───▶│ Celery Workers │
 │ (HTTP API) │ │ (Message │ │ (Background │
@@ -28,6 +29,7 @@ A FastAPI application with Celery background task processing for applying LUT fi
 │ Flower │ │ Task Results │
 │ (Monitoring) │ │ (Redis DB) │
 └─────────────────┘ └─────────────────┘
+```
 
 ## Tech Stack
 
