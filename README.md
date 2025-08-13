@@ -13,6 +13,7 @@ A FastAPI application with Celery background task processing for applying LUT fi
 
 ## Architecture
 
+```md
 ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐
 │ FastAPI App │───▶│ Redis Broker │───▶│ Celery Workers │
 │ (HTTP API) │ │ (Message │ │ (Background │
@@ -28,6 +29,7 @@ A FastAPI application with Celery background task processing for applying LUT fi
 │ Flower │ │ Task Results │
 │ (Monitoring) │ │ (Redis DB) │
 └─────────────────┘ └─────────────────┘
+```
 
 ## Tech Stack
 
@@ -40,6 +42,7 @@ A FastAPI application with Celery background task processing for applying LUT fi
 
 ## Project Structure
 
+```md
 xmp-processor/
 ├── app/
 │ ├── api/
@@ -60,6 +63,7 @@ xmp-processor/
 ├── Dockerfile # Container definition
 ├── requirements.txt # Python dependencies
 └── README.md
+```
 
 ## Prerequisites
 
@@ -170,7 +174,7 @@ Start FastAPI server
 uvicorn app.main:app --reload --port 8000
 ```
 
-### Adding New LUT Filters
+## Adding New LUT Filters
 
 1. Add `.cube` files to the `app/filters/` directory
 2. Use the filename (without extension) as the `filter_name` in API requests
